@@ -1,6 +1,6 @@
 const constants = require("../constants");
 const imports = require("../imports");
-const EventHandler = require("../classes/EventHandler");
+const EventHandler = require("../EventHandler");
 
 function createOpus(input = "-", extraArgs = [], ffmpegPath = constants.defaultFFmpegPath) {
     const eventHandler = { };

@@ -1,6 +1,6 @@
 const constants = require("./constants");
 const Gateway = require("./classes/Gateway");
-const EventHandler = require("./classes/EventHandler");
+const EventHandler = require("./EventHandler");
 const parseEvent = require("./utils/parseEvent");
 const Guilds = require("./classes/Guilds");
 const Channels = require("./classes/Channels");

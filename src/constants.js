@@ -74,7 +74,7 @@ const constants = {
     },
     defaultFFmpegPath: "ffmpeg",
     defaultVoiceMode: "aead_aes256_gcm_rtpsize",
-    allowedVoiceModes: ["aead_aes256_gcm_rtpsize", "aead_xchacha20_poly1305_rtpsize"],
+    allowedVoiceModes: ["aead_aes256_gcm_rtpsize"], // TODO: aead_xchacha20_poly1305_rtpsize
     channelTypes: {
         GUILD_TEXT: 0,
         DM: 1,

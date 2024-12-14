@@ -1,7 +1,6 @@
 const constants = require("../constants");
-const EventHandler = require("../utils/EventHandler");
 const imports = require("../imports");
-const { promiseTimeout } = require("../utils");
+const { promiseTimeout, EventHandler } = require("../utils");
 
 function init(client) {
     // https://discord.com/developers/docs/topics/voice-connections#establishing-a-voice-websocket-connection

@@ -1,5 +1,4 @@
-const EventHandler = require("../utils/EventHandler");
-const { promiseTimeout } = require("../utils");
+const { promiseTimeout, EventHandler } = require("../utils");
 const imports = require("../imports");
 const constants = require("../constants");
 

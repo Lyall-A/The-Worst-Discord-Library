@@ -24,7 +24,7 @@ function init(client) {
                 selfDeafened: raw.self_deaf,
                 selfMuted: raw.self_mute,
                 selfStreaming: raw.self_stream,
-                selfVideoing: raw.self_videoing,
+                selfVideoing: raw.self_video,
                 suppressed: raw.suppress,
                 requestToSpeakTimestamp: raw.request_to_speak_timestamp
             };

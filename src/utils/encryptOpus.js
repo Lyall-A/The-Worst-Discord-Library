@@ -17,9 +17,9 @@ function encryptOpus(opusData, mode, rtpHeader, secretKey, nonce = 0) {
         ]);
     
         return Buffer.concat([encrypted, noncePadding]);
-    } else
-    if (mode === "aead_xchacha20_poly1305_rtpsize") {
-        throw new Error(`${mode} not implemented yet`);
+    // } else
+    // if (mode === "aead_xchacha20_poly1305_rtpsize") {
+        // throw new Error(`${mode} not implemented yet`);
     } else throw new Error(`Unsupported encryption mode ${mode}`);
 }
 

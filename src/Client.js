@@ -1,15 +1,7 @@
 const constants = require("./constants");
-const EventHandler = require("./utils/EventHandler");
-const { parseEvent } = require("./utils");
+const { parseEvent, EventHandler } = require("./utils");
 const api = require("./api");
 const classes = require("./classes");
-// const Gateway = require("./classes/Gateway");
-// const Guilds = require("./classes/Guilds");
-// const Channels = require("./classes/Channels");
-// const Users = require("./classes/Users");
-// const VoiceGateway = require("./classes/VoiceGateway");
-// const VoiceUDP = require("./classes/VoiceUDP");
-// const Voice = require("./classes/Voice");
 const parsers = require("./parsers");
 
 class Client {

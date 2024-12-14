@@ -7,11 +7,11 @@ function init(client) {
             this.raw = raw;
         }
 
-        toJSON() {
+        async toJSON() {
             const raw = this.raw;
             const json = {
                 version: raw.v,
-                user: new client.UserParser(raw.user).toJSON(),
+                user: await new client.UserParser(raw.user).toJSON(),
                 guilds: raw.guilds,
                 sessionId: raw.session_id,
                 resumeGatewayUrl: raw.resume_gateway_url,

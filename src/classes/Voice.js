@@ -1,10 +1,11 @@
-const { createOpus, createVoicePacket } = require("../utils");
+const { createOpus, createVoicePacket, EventHandler } = require("../utils");
 const constants = require("../constants");
 
 function init(client) {
     class Voice {
         constructor(channel) {
             this.channel = channel;
+            this.eventHandler = new EventHandler(this);
         }
 
         speaking = false;
@@ -124,6 +125,8 @@ function init(client) {
             this.stopped = false;
             this.building = true;
             this.playing = true;
+            this.call("playing");
+            this.call("building");
 
             this.setSpeaking(true);
 
@@ -140,8 +143,10 @@ function init(client) {
 
         async stop() {
             if (this.stopped || this.stopping) return;
-            if (this.building) this.opus.kill("SIGKILL");
+            this.call("stopping");
             this.stopping = true;
+            if (this.building) this.opus.kill("SIGKILL");
+
             this.queue = [];
             this.nextPacketTime = null;
 
@@ -150,6 +155,7 @@ function init(client) {
 
             this.stopping = false;
             this.stopped = true;
+            this.call("stopped");
         }
 
         sendQueue() {
@@ -185,7 +191,7 @@ function init(client) {
 
         sendOpusData(opusData) {
             return new Promise((resolve, reject) => {
-                const packet = createVoicePacket(opusData, "aead_aes256_gcm_rtpsize", this.secretKey, this.nonce, this.sequence, this.timestamp, this.ssrc);
+                const packet = createVoicePacket(opusData, this.mode, this.secretKey, this.nonce, this.sequence, this.timestamp, this.ssrc);
 
                 this.voiceUDP.send(packet, err => {
                     if (err) reject(err);

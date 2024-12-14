@@ -9,13 +9,10 @@ client.on("READY", async event => {
     await voice.prepare();
     voice.setFFmpegArgs([ "-af", "asetrate=44100*1.2" ]);
     voice.play(process.env.TRACK_INPUT);
-
-    // await client.channels.get("1310490307137245216").then(i => i.send(`Playing ${process.env.TRACK_INPUT}`))
 });
 
 client.on("MESSAGE_CREATE", msg => {
     if (msg.author.id === client.user.id) return;
-    // msg.channel.send(msg.content)
     console.log(`[${msg.channel.name}] ${msg.content}`);
     msg.reply(`"${msg.content}" :nerd::nerd::nerd:`)
 });

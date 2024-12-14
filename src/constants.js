@@ -2,9 +2,51 @@ const constants = {
     gatewayBaseUrl: "wss://gateway.discord.gg",
     gatewayVersion: 10,
     gatewayEncoding: "json",
+    gatewayOpcodes: {
+        DISPATCH: 0,
+        HEARTBEAT: 1,
+        IDENTIFY: 2,
+        PRESENCE_UPDATE: 3,
+        VOICE_STATE_UPDATE: 4,
+        RESUME: 6,
+        RECONNECT: 7,
+        REQUEST_GUILD_MEMBERS: 8,
+        INVALID_SESSION: 9,
+        HELLO: 10,
+        HEARTBEAT_ACK: 11,
+        REQUEST_SOUNDBOARD_SOUNDS: 31
+    },
     apiBaseUrl: "https://discord.com/api",
     apiVersion: 10,
     voiceGatewayVersion: 8,
+    voiceGatewayOpcodes: {
+        IDENTIFY: 0,
+        SELECT_PROTOCOL: 1,
+        READY: 2,
+        HEARTBEAT: 3,
+        SESSION_DESCRIPTION: 4,
+        SPEAKING: 5,
+        HEARTBEAT_ACK: 6,
+        RESUME: 7,
+        HELLO: 8,
+        RESUMED: 9,
+        CLIENTS_CONNECT: 11,
+        CLIENT_DISCONNECT: 13,
+        DAVE_PREPARE_TRANSITION: 21,
+        DAVE_EXECUTE_TRANSITION: 22,
+        DAVE_TRANSITION_READY: 23,
+        DAVE_PREPARE_EPOCH: 24,
+        DAVE_MLS_EXTERNAL_SENDER: 25,
+        DAVE_MLS_KEY_PACKAGE: 26,
+        DAVE_MLS_PROPOSALS: 27,
+        DAVE_MLS_COMMIT_WELCOME: 28,
+        DAVE_MLS_ANNOUNCE_COMMIT_TRANSITION: 29,
+        DAVE_MLS_WELCOME: 30,
+        DAVE_MLS_INVALID_COMMIT_WELCOME: 31
+    },
+    voiceTimestampIncrement: (48000 / 100) * 2,
+    voiceTimestampMax: 2 ** 32,
+    voiceSequenceMax: 2 ** 16,
     intents: {
         // https://discord.com/developers/docs/events/gateway#list-of-intents
         GUILDS: 1 << 0,
@@ -29,40 +71,7 @@ const constants = {
         GUILD_MESSAGE_POLLS: 1 << 24,
         DIRECT_MESSAGE_POLLS: 1 << 25,
     },
-    gatewayOpcodes: {
-        DISPATCH: 0,
-        HEARTBEAT: 1,
-        IDENTIFY: 2,
-        PRESENCE_UPDATE: 3,
-        VOICE_STATE_UPDATE: 4,
-        RESUME: 6,
-        RECONNECT: 7,
-        REQUEST_GUILD_MEMBERS: 8,
-        INVALID_SESSION: 9,
-        HELLO: 10,
-        HEARTBEAT_ACK: 11,
-        REQUEST_SOUNDBOARD_SOUNDS: 31
-    },
-    voiceGatewayOpcodes: {
-        IDENTIFY: 0,
-        SELECT_PROTOCOL: 1,
-        READY: 2,
-        HEARTBEAT: 3,
-        SESSION_DESCRIPTION: 4,
-        SPEAKING: 5,
-        HEARTBEAT_ACK: 6,
-        RESUME: 7,
-        HELLO: 8,
-        RESUMED: 9,
-        CLIENTS_CONNECT: 10,
-        CLIENT_DISCONNECT: 13,
-        // TODO: DAVE opcodes
-        
-    },
     defaultFFmpegPath: "ffmpeg",
-    voiceTimestampIncrement: (48000 / 100) * 2,
-    voiceTimestampMax: 2 ** 32,
-    voiceSequenceMax: 2 ** 16,
     defaultVoiceMode: "aead_aes256_gcm_rtpsize",
     allowedVoiceModes: ["aead_aes256_gcm_rtpsize", "aead_xchacha20_poly1305_rtpsize"],
     channelTypes: {
@@ -83,9 +92,7 @@ const constants = {
     channelVoiceTypes: [
         "GUILD_VOICE"
     ],
-    readyTimeout: 5000,
-    timeout: 5000,
-    gatewayReconnectTimeout: 1000
+    timeout: 5000
 };
 
 module.exports = constants;

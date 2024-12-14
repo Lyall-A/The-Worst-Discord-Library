@@ -78,12 +78,6 @@ class Client {
             })
         });
     }
-
-    // call = this.eventHandler.call;
-    // on = this.eventHandler.on;
-    // once = this.eventHandler.once;
-    // addListener = this.eventHandler.addListener;
-    // removeListener = this.eventHandler.removeListener;
 }
 
 module.exports = Client;

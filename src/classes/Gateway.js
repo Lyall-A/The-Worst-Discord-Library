@@ -1,6 +1,6 @@
 const constants = require("../constants");
-const EventHandler = require("../EventHandler");
-const promiseTimeout = require("../utils/promiseTimeout");
+const EventHandler = require("../utils/EventHandler");
+const { promiseTimeout } = require("../utils");
 const imports = require("../imports");
 
 function init(client) {
@@ -71,7 +71,7 @@ function init(client) {
         heartbeatIntervalTime = null;
         heartbeatInterval = null;
         lastSequence = null;
-        send = (op, data) => this.socket.send(JSON.stringify({ op: constants.gatewayOpcodes[op] ?? op, d: data?.toAPI ? data.toAPI() : data }));
+        send = async (op, data) => this.socket.send(JSON.stringify({ op: constants.gatewayOpcodes[op] ?? op, d: data?.toAPI ? await data.toAPI() : data }));
         heartbeat = () => this.send("HEARTBEAT", this.lastSequence);
         identify = (options = {}) => {
             return new Promise((resolve, reject) => {
@@ -79,9 +79,9 @@ function init(client) {
 
                 this.send("IDENTIFY", new client.IdentifyParser(options));
 
-                this.once("op-READY", ({ data }) => {
+                this.once("op-READY", async ({ data }) => {
                     stopTimeout();
-                    resolve(new client.ReadyParser(data).toJSON());
+                    resolve(await new client.ReadyParser(data).toJSON());
                 });
             });
         }

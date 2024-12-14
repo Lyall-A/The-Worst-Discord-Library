@@ -1,4 +1,4 @@
-const intentParser = require("../utils/intentParser");
+const { intentParser } = require("../utils");
 
 function init(client) {
     // https://discord.com/developers/docs/resources/channel#channel-object-channel-structure

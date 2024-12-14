@@ -7,19 +7,19 @@ function init(client) {
 
         get(channelId) {
             return new Promise((resolve, reject) => {
-                client.api(`/channels/${channelId}`).then(res => {
-                    if (res.status !== 200) return reject(res)
+                client.api(`/channels/${channelId}`).then(async res => {
+                    if (res.status !== 200) return reject(res);
 
-                    const channel = new client.ChannelParser(res.parsed).toJSON();
+                    const channel = await new client.ChannelParser(res.parsed).toJSON();
                     this._cache.push(channel);
                     resolve(channel);
                 });
             });
         }
 
-        cached = {
+        cache = {
             get: (channelId) => {
-                const cachedChannel = this._cache.channels.find(i => i.id === channelId);
+                const cachedChannel = this._cache.find(i => i.id === channelId);
                 if (cachedChannel) return cachedChannel;
 
                 return this.get(channelId);

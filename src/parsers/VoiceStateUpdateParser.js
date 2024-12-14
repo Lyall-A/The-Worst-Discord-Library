@@ -1,7 +1,7 @@
 // TODO
 
 function init(client) {
-    // https://discord.com/developers/docs/resources/voice#voice-state-object-voice-state-structure
+    // https://discord.com/developers/docs/events/gateway-events#update-voice-state-example-gateway-voice-state-update
     class VoiceStateUpdateParser {
         constructor(raw = {}) {
             this.raw = raw;
@@ -9,12 +9,7 @@ function init(client) {
 
         toJSON() {
             const raw = this.raw;
-            const json = {
-                userId: raw.user_id,
-                channelId: raw.channel_id,
-                guildId: raw.guild_id,
-                sessionId: raw.session_id
-            };
+            const json = {};
 
             return json;
         }

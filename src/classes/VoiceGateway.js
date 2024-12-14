@@ -1,7 +1,7 @@
 const constants = require("../constants");
-const EventHandler = require("../EventHandler");
+const EventHandler = require("../utils/EventHandler");
 const imports = require("../imports");
-const promiseTimeout = require("../utils/promiseTimeout");
+const { promiseTimeout } = require("../utils");
 
 function init(client) {
     // https://discord.com/developers/docs/topics/voice-connections#establishing-a-voice-websocket-connection
@@ -67,7 +67,7 @@ function init(client) {
         heartbeatIntervalTime = null;
         heartbeatInterval = null;
         lastSequence = null;
-        send = (op, data) => this.socket.send(JSON.stringify({ op: constants.voiceGatewayOpcodes[op] ?? op, d: data?.toAPI ? data.toAPI() : data }));
+        send = async (op, data) => this.socket.send(JSON.stringify({ op: constants.voiceGatewayOpcodes[op] ?? op, d: data?.toAPI ? await data.toAPI() : data }));
         heartbeat = () => this.send("HEARTBEAT", { t: Date.now(), seq_ack: this.lastSequence });
         identify = (options = {}) => {
             return new Promise((resolve, reject) => {
@@ -75,9 +75,9 @@ function init(client) {
 
                 this.send("IDENTIFY", new client.VoiceIdentifyParser(options));
 
-                this.once("op-READY", ({ data }) => {
+                this.once("op-READY", async ({ data }) => {
                     stopTimeout();
-                    resolve(new client.VoiceReadyParser(data).toJSON());
+                    resolve(await new client.VoiceReadyParser(data).toJSON());
                 });
             });
         };
@@ -87,9 +87,9 @@ function init(client) {
 
                 this.send("SELECT_PROTOCOL", new client.SelectProtocolParser(options));
 
-                this.once("op-SESSION_DESCRIPTION", ({ data }) => {
+                this.once("op-SESSION_DESCRIPTION", async ({ data }) => {
                     stopTimeout();
-                    resolve(new client.SessionDescriptionParser(data).toJSON());
+                    resolve(await new client.SessionDescriptionParser(data).toJSON());
                 });
             });
         };

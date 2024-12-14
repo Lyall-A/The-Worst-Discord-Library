@@ -1,5 +1,4 @@
-const createOpus = require("../utils/createOpus");
-const createVoicePacket = require("../utils/createVoicePacket");
+const { createOpus, createVoicePacket } = require("../utils");
 const constants = require("../constants");
 
 function init(client) {

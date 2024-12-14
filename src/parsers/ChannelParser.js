@@ -1,6 +1,6 @@
 // TODO
 const constants = require("../constants");
-const promiseTimeout = require("../utils/promiseTimeout");
+const { promiseTimeout } = require("../utils");
 
 function init(client) {
     // https://discord.com/developers/docs/resources/channel#channel-object-channel-structure
@@ -22,7 +22,9 @@ function init(client) {
             json.name = raw.name;
             json.guildId = raw.guild_id;
             json.isVoice = constants.channelVoiceTypes.includes(json.type);
-            if (json.isVoice) json.join = (selfMute = false, selfDeaf = false) => {
+            json.isText = constants.channelTextTypes.includes(json.type);
+            if (json.isVoice) {
+                json.join = (selfMute = false, selfDeaf = false) => {
                 return new Promise((resolve, reject) => {
                     let receivedVoiceStateUpdate = false;
                     let receivedVoiceServerUpdate = false;
@@ -66,6 +68,17 @@ function init(client) {
                     client.addListener("VOICE_STATE_UPDATE", voiceStateUpdateEvent);
                     client.addListener("VOICE_SERVER_UPDATE", voiceServerUpdateEvent);
                 });
+            }
+        }
+            if (json.isText) {
+                json.send = (message) => {
+                    return new Promise((resolve, reject) => {
+                        client.api(`/channels/${raw.id}/messages`, {
+                            method: "POST",
+                            json: { content: message }
+                        });
+                    });
+                }
             }
 
             return json;

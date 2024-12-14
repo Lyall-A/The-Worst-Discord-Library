@@ -1,26 +1,16 @@
 const constants = require("./constants");
-const Gateway = require("./classes/Gateway");
-const EventHandler = require("./EventHandler");
-const parseEvent = require("./utils/parseEvent");
-const Guilds = require("./classes/Guilds");
-const Channels = require("./classes/Channels");
-const Users = require("./classes/Users");
+const EventHandler = require("./utils/EventHandler");
+const { parseEvent } = require("./utils");
 const api = require("./api");
-const VoiceGateway = require("./classes/VoiceGateway");
-const VoiceUDP = require("./classes/VoiceUDP");
-const Voice = require("./classes/Voice");
-const IdentifyParser = require("./parsers/IdentifyParser");
-const VoiceServerUpdateParser = require("./parsers/VoiceServerUpdateParser");
-const VoiceStateUpdateParser = require("./parsers/VoiceStateUpdateParser");
-const UserParser = require("./parsers/UserParser");
-const ChannelParser = require("./parsers/ChannelParser");
-const ReadyParser = require("./parsers/ReadyParser");
-const VoiceReadyParser = require("./parsers/VoiceReadyParser");
-const MessageParser = require("./parsers/MessageParser");
-const SessionDescriptionParser = require("./parsers/SessionDescriptionParser");
-const VoiceIdentifyParser = require("./parsers/VoiceIdentifyParser");
-const SelectProtocolParser = require("./parsers/SelectProtocolParser");
-const SpeakingParser = require("./parsers/SpeakingParser");
+const classes = require("./classes");
+// const Gateway = require("./classes/Gateway");
+// const Guilds = require("./classes/Guilds");
+// const Channels = require("./classes/Channels");
+// const Users = require("./classes/Users");
+// const VoiceGateway = require("./classes/VoiceGateway");
+// const VoiceUDP = require("./classes/VoiceUDP");
+// const Voice = require("./classes/Voice");
+const parsers = require("./parsers");
 
 class Client {
     constructor(options = {}) {
@@ -32,27 +22,10 @@ class Client {
         this.api = (path, options = {}) => api(path, { token: this.token, tokenType: this.tokenType, ...options });
 
         // classes
-        this.Gateway = Gateway(this);
-        this.Voice = Voice(this);
-        this.VoiceGateway = VoiceGateway(this);
-        this.VoiceUDP = VoiceUDP(this);
-        this.Guilds = Guilds(this);
-        this.Channels = Channels(this);
-        this.Users = Users(this);
+        for (const [ className, classInit ] of Object.entries(classes)) this[className] = classInit(this);
 
         // parsers
-        this.UserParser = UserParser(this);
-        this.ChannelParser = ChannelParser(this);
-        this.VoiceStateUpdateParser = VoiceStateUpdateParser(this);
-        this.VoiceServerUpdateParser = VoiceServerUpdateParser(this);
-        this.SessionDescriptionParser = SessionDescriptionParser(this);
-        this.VoiceReadyParser = VoiceReadyParser(this);
-        this.ReadyParser = ReadyParser(this);
-        this.IdentifyParser = IdentifyParser(this);
-        this.VoiceIdentifyParser = VoiceIdentifyParser(this);
-        this.SelectProtocolParser = SelectProtocolParser(this);
-        this.SpeakingParser = SpeakingParser(this);
-        this.MessageParser = MessageParser(this);
+        for (const [ parserName, parserInit ] of Object.entries(parsers)) this[parserName] = parserInit(this);
 
         this.guilds = new this.Guilds();
         this.channels = new this.Channels();
@@ -76,15 +49,15 @@ class Client {
                 }).catch(err => reject(err));
             }).catch(err => reject(err));
 
-            this.gateway.on("event", ({ event, data }) => {
-                this.call(event, parseEvent(event, data, this) ?? data);
+            this.gateway.on("event", async ({ event, data }) => {
+                this.call(event, await parseEvent(event, data, this) ?? data);
             });
 
             this.on("READY", event => {
                 this.user = event.user;
 
                 resolve();
-            })
+            });
         });
     }
 }

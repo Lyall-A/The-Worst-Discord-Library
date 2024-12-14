@@ -90,6 +90,10 @@ const constants = {
         GUILD_FORUM: 15,
         GUILD_MEDIA: 16,
     },
+    channelTextTypes: [
+        "GUILD_TEXT",
+        "DM"
+    ],
     channelVoiceTypes: [
         "GUILD_VOICE"
     ],

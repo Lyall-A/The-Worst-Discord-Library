@@ -3,12 +3,11 @@ const imports = require("./imports");
 
 function api(path, options = { }) {
     let body;
-
     if (options.json) {
-        body = JSON.stringify(options.body);
+        body = JSON.stringify(options.json);
     } else if (options.multipart) {
         body = new FormData();
-        for (const part of options.body) body.append(part.name, new Blob([part.data], { type: part.type }), part.filename);
+        for (const part of options.multipart) body.append(part.name, new Blob([part.data], { type: part.type }), part.filename);
     }
 
     const fetchOptions = {

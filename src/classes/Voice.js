@@ -131,6 +131,7 @@ function init(client) {
             this.setSpeaking(true);
 
             this.opus = createOpus(input, this.ffmpegArgs);
+            this.opus.on("data", data => this.call("data", data));
             this.opus.on("segment", segment => {
                 if (this.stopped || this.stopping) return;
                 this.queue.push(segment);
@@ -145,7 +146,7 @@ function init(client) {
             if (this.stopped || this.stopping) return;
             this.call("stopping");
             this.stopping = true;
-            if (this.building) this.opus.kill("SIGKILL");
+            if (this.building) this.opus.kill();
 
             this.queue = [];
             this.nextPacketTime = null;

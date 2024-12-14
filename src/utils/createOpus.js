@@ -1,6 +1,6 @@
 const constants = require("../constants");
 const imports = require("../imports");
-const { EventHandler } = require("../utils");
+const EventHandler = require("./EventHandler");
 
 function createOpus(input = "-", extraArgs = [], ffmpegPath = constants.defaultFFmpegPath) {
     const eventHandler = { };
@@ -43,7 +43,7 @@ function createOpus(input = "-", extraArgs = [], ffmpegPath = constants.defaultF
         stdin: ffmpegProcess.stdin,
         stdout: ffmpegProcess.stdout,
         stderr: ffmpegProcess.stderr,
-        kill: ffmpegProcess.kill,
+        kill: (signal = "SIGKILL") => ffmpegProcess.kill(signal),
         ...eventHandler
     };
 }

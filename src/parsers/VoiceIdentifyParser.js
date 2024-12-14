@@ -6,19 +6,14 @@ function init(client) {
         }
 
         toJSON() {
-            const raw = this.raw;
-            const json = {};
 
-            // ...
-
-            return json;
         }
 
         toAPI() {
             const raw = this.raw;
             const json = {
-                server_id: raw.guildId,
-                user_id: raw.userId,
+                server_id: raw.guild.id,
+                user_id: raw.user.id,
                 session_id: raw.sessionId,
                 token: raw.token,
             };

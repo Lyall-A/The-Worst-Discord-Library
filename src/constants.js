@@ -90,6 +90,10 @@ const constants = {
         GUILD_FORUM: 15,
         GUILD_MEDIA: 16,
     },
+    messageReferenceTypes: {
+        DEFAULT: 0,
+        FORWARD: 1
+    },
     channelTextTypes: [
         "GUILD_TEXT",
         "DM"

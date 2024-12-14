@@ -1,4 +1,4 @@
-// TODO
+// TODO: parse guilds, shard, application etc
 
 function init(client) {
     // https://discord.com/developers/docs/events/gateway-events#ready-ready-event-fields

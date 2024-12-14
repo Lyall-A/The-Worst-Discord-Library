@@ -1,9 +1,7 @@
-Parsers that are made with client
+// TODO
 
-## Template:
-```js
 function init(client) {
-    // https://discord.com/developers/...
+    // https://discord.com/developers/docs/resources/guild#guild-member-object-guild-member-structure
     class TemplateParser {
         constructor(raw = {}) {
             this.raw = raw;
@@ -25,12 +23,7 @@ function init(client) {
          * Parse into JSON to be sent to API
          */
         toAPI() {
-            const raw = this.raw;
-            const json = {};
 
-            // ...
-
-            return json;
         }
     }
 
@@ -38,4 +31,3 @@ function init(client) {
 }
 
 module.exports = init;
-```

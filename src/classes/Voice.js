@@ -28,12 +28,12 @@ function init(client) {
 
         join() {
             if (!this.channel.isVoice) throw new Error(`Not a voice channel`);
-            return this.channel.join().then(({ token, endpoint, userId, channelId, guildId, sessionId }) => {
+            return this.channel.join().then(({ token, endpoint, user, channel, guild, sessionId }) => {
                 this.token = token;
                 this.endpoint = endpoint;
-                this.userId = userId;
-                this.channelId = channelId;
-                this.guildId = guildId;
+                this.user = user;
+                this.channel = channel;
+                this.guild = guild;
                 this.sessionId = sessionId;
 
                 this.joined = true;
@@ -51,8 +51,8 @@ function init(client) {
 
         identifyVoiceGateway() {
             return this.voiceGateway.identify({
-                guildId: this.guildId,
-                userId: this.userId,
+                guild: this.guild,
+                user: this.user,
                 sessionId: this.sessionId,
                 token: this.token
             }).then(({ ssrc, address, port, modes }) => {

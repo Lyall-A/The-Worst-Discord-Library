@@ -1,4 +1,3 @@
-// TODO
 const constants = require("../constants");
 
 function init(client) {
@@ -9,10 +8,7 @@ function init(client) {
         }
 
         toJSON() {
-            const raw = this.raw;
-            const json = {};
 
-            return json;
         }
 
         toAPI() {

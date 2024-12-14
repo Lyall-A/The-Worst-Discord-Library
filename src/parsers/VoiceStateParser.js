@@ -1,5 +1,3 @@
-// TODO
-
 function init(client) {
     // https://discord.com/developers/docs/resources/voice#voice-state-object-voice-state-structure
     class VoiceStateParser {
@@ -7,23 +5,35 @@ function init(client) {
             this.raw = raw;
         }
 
-        toJSON() {
+        async toJSON() {
             const raw = this.raw;
+
+            const guild = await client.guilds.cache.get(raw.guild_id); // TODO: bad idea?
+            const channel = await client.channels.cache.get(raw.channel_id);
+            const user = await client.users.cache.get(raw.user_id);
+            const member = await new client.GuildMemberParser(raw.member).toJSON();
+
             const json = {
-                userId: raw.user_id,
-                channelId: raw.channel_id,
-                guildId: raw.guild_id,
-                sessionId: raw.session_id
+                guild,
+                channel,
+                user,
+                member,
+                sessionId: raw.session_id,
+                deafened: raw.deaf,
+                muted: raw.mute,
+                selfDeafened: raw.self_deaf,
+                selfMuted: raw.self_mute,
+                selfStreaming: raw.self_stream,
+                selfVideoing: raw.self_videoing,
+                suppressed: raw.suppress,
+                requestToSpeakTimestamp: raw.request_to_speak_timestamp
             };
 
             return json;
         }
 
         toAPI() {
-            const raw = this.raw;
-            const json = {};
 
-            return json;
         }
     }
 

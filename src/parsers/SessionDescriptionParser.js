@@ -1,5 +1,3 @@
-// TODO
-
 function init(client) {
     // https://discord.com/developers/docs/topics/voice-connections#transport-encryption-modes-example-session-description-payload
     class SessionDescriptionParser {

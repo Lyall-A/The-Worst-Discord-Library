@@ -1,5 +1,3 @@
-// TODO
-
 function init(client) {
     // https://discord.com/developers/docs/topics/voice-connections#establishing-a-voice-websocket-connection-example-voice-ready-payload
     class VoiceReadyParser {
@@ -14,7 +12,6 @@ function init(client) {
                 address: raw.ip,
                 port: raw.port,
                 modes: raw.modes,
-                // heartbeatInterval: raw.heartbeat_interval
             };
 
             return json;

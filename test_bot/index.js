@@ -15,11 +15,13 @@ client.on("READY", async event => {
 
 client.on("MESSAGE_CREATE", msg => {
     if (msg.author.id === client.user.id) return;
-    msg.channel.send(msg.content)
+    // msg.channel.send(msg.content)
+    console.log(`[${msg.channel.name}] ${msg.content}`);
+    msg.reply(`"${msg.content}" :nerd::nerd::nerd:`)
 });
 
-setInterval(() => {
-    console.log(client.cache);
-}, 5000);
+// setInterval(() => {
+    // console.log(client.cache);
+// }, 5000);
 
 client.login(process.env.DISCORD_TOKEN);

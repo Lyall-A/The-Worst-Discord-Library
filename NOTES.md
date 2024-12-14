@@ -1,0 +1,1 @@
+* Parser toJSON and toAPI can be asynchronous so they must be awaited

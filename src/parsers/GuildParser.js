@@ -1,31 +1,34 @@
 // TODO
 
 function init(client) {
-    // https://discord.com/developers/docs/resources/user#user-object-user-structure
-    class UserParser {
+    // https://discord.com/developers/docs/resources/guild#guild-object-guild-structure
+    class GuildParser {
         constructor(raw = {}) {
             this.raw = raw;
         }
 
+        /**
+         * Parse into JSON used for client
+         */
         toJSON() {
             const raw = this.raw;
             const json = {
                 id: raw.id,
-                username: raw.username,
-                discriminator: raw.discriminator,
-                globalName: raw.global_name,
-                bot: raw.bot
+                name: raw.name
             };
 
             return json;
         }
 
+        /**
+         * Parse into JSON to be sent to API
+         */
         toAPI() {
 
         }
     }
 
-    return UserParser;
+    return GuildParser;
 }
 
 module.exports = init;

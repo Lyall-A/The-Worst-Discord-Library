@@ -1,5 +1,3 @@
-// TODO
-
 function init(client) {
     // https://discord.com/developers/docs/topics/voice-connections#retrieving-voice-server-information-example-voice-server-update-payload
     class VoiceServerUpdateParser {
@@ -7,11 +5,14 @@ function init(client) {
             this.raw = raw;
         }
 
-        toJSON() {
+        async toJSON() {
             const raw = this.raw;
+
+            const guild = await client.guilds.cache.get(raw.guild_id);
+
             const json = {
                 token: raw.token,
-                guildId: raw.guild_id,
+                guild,
                 endpoint: raw.endpoint,
             };
 

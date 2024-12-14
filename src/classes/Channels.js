@@ -11,7 +11,7 @@ function init(client) {
                     if (res.status !== 200) return reject(res);
 
                     const channel = await new client.ChannelParser(res.parsed).toJSON();
-                    this._cache.push(channel);
+                    this.cache.add(channel);
                     resolve(channel);
                 });
             });
@@ -19,10 +19,21 @@ function init(client) {
 
         cache = {
             get: (channelId) => {
-                const cachedChannel = this._cache.find(i => i.id === channelId);
+                const cachedChannel = this.cache.find(channelId);
                 if (cachedChannel) return cachedChannel;
-
+                
                 return this.get(channelId);
+            },
+            add: (channel) => {
+                const index = this.cache.findIndex(i => i.id === channel.id);
+                index === null ? this._cache.push(channel) : this._cache[index] = channel;
+            },
+            find: (channelId) => {
+                return this._cache.find(i => i.id === channelId) ?? null;
+            },
+            findIndex: (channelId) => {
+                const index = this._cache.findIndex(i => i.id === channelId);
+                return index < 0 ? null : index;
             }
         }
     }

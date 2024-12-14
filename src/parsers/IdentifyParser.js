@@ -8,14 +8,7 @@ function init(client) {
         }
 
         toJSON() {
-            const raw = this.raw;
-            const json = {
-                token: raw.token ?? "",
-                properties: raw.properties ?? {},
-                intents: intentParser.intToObj(raw.intents) ?? 0
-            };
 
-            return json;
         }
 
         toAPI() {

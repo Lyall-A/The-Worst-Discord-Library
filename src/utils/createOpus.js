@@ -40,6 +40,10 @@ function createOpus(input = "-", extraArgs = [], ffmpegPath = constants.defaultF
 
     return {
         ffmpegProcess,
+        stdin: ffmpegProcess.stdin,
+        stdout: ffmpegProcess.stdout,
+        stderr: ffmpegProcess.stderr,
+        kill: ffmpegProcess.kill,
         ...eventHandler
     };
 }

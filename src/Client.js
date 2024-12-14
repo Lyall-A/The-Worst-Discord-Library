@@ -7,6 +7,8 @@ const Channels = require("./classes/Channels");
 const Users = require("./classes/Users");
 const api = require("./api");
 const VoiceGateway = require("./classes/VoiceGateway");
+const VoiceUDP = require("./classes/VoiceUDP");
+const Voice = require("./classes/Voice");
 const IdentifyParser = require("./parsers/IdentifyParser");
 const VoiceServerUpdateParser = require("./parsers/VoiceServerUpdateParser");
 const VoiceStateUpdateParser = require("./parsers/VoiceStateUpdateParser");
@@ -14,11 +16,11 @@ const UserParser = require("./parsers/UserParser");
 const ChannelParser = require("./parsers/ChannelParser");
 const ReadyParser = require("./parsers/ReadyParser");
 const VoiceReadyParser = require("./parsers/VoiceReadyParser");
+const MessageParser = require("./parsers/MessageParser");
 const SessionDescriptionParser = require("./parsers/SessionDescriptionParser");
 const VoiceIdentifyParser = require("./parsers/VoiceIdentifyParser");
 const SelectProtocolParser = require("./parsers/SelectProtocolParser");
 const SpeakingParser = require("./parsers/SpeakingParser");
-const VoiceUDP = require("./classes/VoiceUDP");
 
 class Client {
     constructor(options = {}) {
@@ -28,10 +30,17 @@ class Client {
         this.cache = {};
 
         this.api = (path, options = {}) => api(path, { token: this.token, tokenType: this.tokenType, ...options });
+
+        // classes
         this.Gateway = Gateway(this);
+        this.Voice = Voice(this);
         this.VoiceGateway = VoiceGateway(this);
         this.VoiceUDP = VoiceUDP(this);
+        this.Guilds = Guilds(this);
+        this.Channels = Channels(this);
+        this.Users = Users(this);
 
+        // parsers
         this.UserParser = UserParser(this);
         this.ChannelParser = ChannelParser(this);
         this.VoiceStateUpdateParser = VoiceStateUpdateParser(this);
@@ -43,14 +52,14 @@ class Client {
         this.VoiceIdentifyParser = VoiceIdentifyParser(this);
         this.SelectProtocolParser = SelectProtocolParser(this);
         this.SpeakingParser = SpeakingParser(this);
-
-        this.Guilds = Guilds(this);
-        this.Channels = Channels(this);
-        this.Users = Users(this);
+        this.MessageParser = MessageParser(this);
 
         this.guilds = new this.Guilds();
         this.channels = new this.Channels();
         this.users = new this.Users();
+
+        // options
+        this.ffmpegPath = constants.defaultFFmpegPath;
     }
 
     login(token, tokenType) {

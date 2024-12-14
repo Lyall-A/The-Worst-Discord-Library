@@ -46,6 +46,7 @@ const constants = {
     },
     voiceTimestampIncrement: (48000 / 100) * 2,
     voiceTimestampMax: 2 ** 32,
+    voiceNonceMax: 2 ** 32,
     voiceSequenceMax: 2 ** 16,
     intents: {
         // https://discord.com/developers/docs/events/gateway#list-of-intents

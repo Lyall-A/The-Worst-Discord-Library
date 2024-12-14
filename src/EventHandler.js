@@ -11,6 +11,7 @@ class EventHandler {
     }
 
     call = (event, ...args) => {
+        // console.log("[CALL]", event);
         for (let listenerIndex = this._listeners.length - 1; listenerIndex >= 0; listenerIndex--) {
             const listener = this._listeners[listenerIndex];
             if (listener.event.toLowerCase() !== event.toLowerCase()) continue;

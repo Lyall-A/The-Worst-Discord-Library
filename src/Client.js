@@ -1,6 +1,6 @@
 const constants = require("./constants");
 const Gateway = require("./classes/Gateway");
-const eventHandler = require("./utils/eventHandler");
+const EventHandler = require("./classes/EventHandler");
 const parseEvent = require("./utils/parseEvent");
 const Guilds = require("./classes/Guilds");
 const Channels = require("./classes/Channels");
@@ -23,6 +23,7 @@ const VoiceUDP = require("./classes/VoiceUDP");
 class Client {
     constructor(options = {}) {
         this._options = options;
+        this.eventHandler = new EventHandler(this);
 
         this.cache = {};
 
@@ -78,12 +79,11 @@ class Client {
         });
     }
 
-    _listeners = [];
-    call = eventHandler.call;
-    on = eventHandler.on;
-    once = eventHandler.once;
-    addListener = eventHandler.addListener;
-    removeListener = eventHandler.removeListener;
+    // call = this.eventHandler.call;
+    // on = this.eventHandler.on;
+    // once = this.eventHandler.once;
+    // addListener = this.eventHandler.addListener;
+    // removeListener = this.eventHandler.removeListener;
 }
 
 module.exports = Client;

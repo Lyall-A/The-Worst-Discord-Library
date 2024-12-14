@@ -1,5 +1,5 @@
 const constants = require("../constants");
-const eventHandler = require("../utils/eventHandler");
+const EventHandler = require("./EventHandler");
 const imports = require("../imports");
 const promiseTimeout = require("../utils/promiseTimeout");
 
@@ -8,6 +8,7 @@ function init(client) {
     class VoiceGateway {
         constructor(options = {}) {
             this._options = options;
+            this.eventHandler = new EventHandler(this);
             this.url = `wss://${options.endpoint}?v=${constants.voiceGatewayVersion}`;
         }
 
@@ -95,13 +96,6 @@ function init(client) {
         speaking = (options = {}) => {
             this.send("SPEAKING", new client.SpeakingParser(options));
         }
-
-        _listeners = [];
-        call = eventHandler.call;
-        on = eventHandler.on;
-        once = eventHandler.once;
-        addListener = eventHandler.addListener;
-        removeListener = eventHandler.removeListener;
     }
 
     return VoiceGateway;

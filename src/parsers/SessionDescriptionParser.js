@@ -11,7 +11,7 @@ function init(client) {
             const raw = this.raw;
             const json = {
                 mode: raw.mode,
-                secretKey: raw.secret_key
+                secretKey: Buffer.from(raw.secret_key)
             };
 
             return json;

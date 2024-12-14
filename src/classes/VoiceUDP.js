@@ -1,4 +1,4 @@
-const eventHandler = require("../utils/eventHandler");
+const EventHandler = require("./EventHandler");
 const promiseTimeout = require("../utils/promiseTimeout");
 const imports = require("../imports");
 const constants = require("../constants");
@@ -7,6 +7,7 @@ function init(client) {
     class VoiceUDP {
         constructor(options = { }) {
             this._options = options;
+            this.eventHandler = new EventHandler(this);
             this.address = options.address;
             this.port = options.port;
             this.ssrc = options.ssrc;
@@ -48,13 +49,6 @@ function init(client) {
         }
 
         send(msg, callback) { this.socket.send(msg, this.port, this.address, callback) }
-
-        _listeners = [];
-        call = eventHandler.call;
-        on = eventHandler.on;
-        once = eventHandler.once;
-        addListener = eventHandler.addListener;
-        removeListener = eventHandler.removeListener;
     }
 
     return VoiceUDP;

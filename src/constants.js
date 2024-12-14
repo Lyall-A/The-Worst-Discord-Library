@@ -59,6 +59,10 @@ const constants = {
         // TODO: DAVE opcodes
         
     },
+    defaultFFmpegPath: "ffmpeg",
+    voiceTimestampIncrement: (48000 / 100) * 2,
+    voiceTimestampMax: 2 ** 32,
+    voiceSequenceMax: 2 ** 16,
     defaultVoiceMode: "aead_aes256_gcm_rtpsize",
     allowedVoiceModes: ["aead_aes256_gcm_rtpsize", "aead_xchacha20_poly1305_rtpsize"],
     channelTypes: {

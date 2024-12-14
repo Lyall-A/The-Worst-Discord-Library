@@ -42,7 +42,7 @@ function init(client) {
                         receivedVoiceStateUpdate = data;
                         receivedCheck();
                     }
-
+                    
                     function voiceServerUpdateEvent(data) {
                         if (data.guildId !== raw.guild_id) return;
                         client.removeListener("VOICE_SERVER_UPDATE", voiceServerUpdateEvent);

@@ -1,5 +1,5 @@
 const constants = require("../constants");
-const eventHandler = require("../utils/eventHandler");
+const EventHandler = require("./EventHandler");
 const promiseTimeout = require("../utils/promiseTimeout");
 const imports = require("../imports");
 
@@ -7,6 +7,7 @@ function init(client) {
     // https://discord.com/developers/docs/events/gateway
     class Gateway {
         constructor(url) {
+            this.eventHandler = new EventHandler(this);
             this.url = url ?? client.gatewayURL ?? `${constants.gatewayBaseUrl}?v=${constants.gatewayVersion}&encoding=${constants.gatewayVersion}`;
         }
 
@@ -84,13 +85,6 @@ function init(client) {
                 });
             });
         }
-
-        _listeners = [];
-        call = eventHandler.call;
-        on = eventHandler.on;
-        once = eventHandler.once;
-        addListener = eventHandler.addListener;
-        removeListener = eventHandler.removeListener;
     }
 
     return Gateway;

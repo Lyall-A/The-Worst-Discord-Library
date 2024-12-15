@@ -2,7 +2,7 @@
 
 function init(client) {
     // https://discord.com/developers/docs/resources/guild#guild-member-object-guild-member-structure
-    class TemplateParser {
+    class GuildMemberParser {
         constructor(raw = {}) {
             this.raw = raw;
         }
@@ -14,7 +14,7 @@ function init(client) {
             const raw = this.raw;
             const json = {
                 nickname: raw.nick,
-                user: await new client.UserParser(raw.user).toJSON()
+                user: raw.user ? await new client.UserParser(raw.user).toJSON() : null
             };
 
             return json;
@@ -28,7 +28,7 @@ function init(client) {
         }
     }
 
-    return TemplateParser;
+    return GuildMemberParser;
 }
 
 module.exports = init;

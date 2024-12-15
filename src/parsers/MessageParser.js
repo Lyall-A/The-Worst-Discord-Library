@@ -15,7 +15,8 @@ function init(client) {
             const guild = await client.guilds.cache.get(raw.guild_id);
             const channel = await client.channels.cache.get(raw.channel_id);
             const author = await new client.UserParser(raw.author).toJSON();
-            const member = await guild.members.cache.get(author.id);
+            const member = await new client.GuildMemberParser(raw.member).toJSON(); // member object isnt in the message structure from docs?
+            // const member = await guild.members.cache.get(author.id);
 
             const json = {
                 id: raw.id,

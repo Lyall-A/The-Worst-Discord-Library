@@ -12,8 +12,8 @@ function init(client) {
         toAPI() {
             const raw = this.raw;
             const json = {
-                guild_id: raw.guild.id ?? "",
-                channel_id: raw.channel.id ?? "",
+                guild_id: raw.guild?.id,
+                channel_id: raw.channel?.id ?? null,
                 self_mute: raw.selfMuted ?? false,
                 self_deaf: raw.selfDeafened ?? false
             };

@@ -10,11 +10,12 @@ function init(client) {
         /**
          * Parse into JSON used for client
          */
-        toJSON() {
+        async toJSON() {
             const raw = this.raw;
-            const json = {};
-
-            // ...
+            const json = {
+                nickname: raw.nick,
+                user: await new client.UserParser(raw.user).toJSON()
+            };
 
             return json;
         }

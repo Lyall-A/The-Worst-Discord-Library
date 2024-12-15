@@ -9,7 +9,7 @@ function init(client) {
             const raw = this.raw;
 
             const guild = await client.guilds.cache.get(raw.guild_id); // TODO: bad idea?
-            const channel = await client.channels.cache.get(raw.channel_id);
+            const channel = raw.channel_id ? await client.channels.cache.get(raw.channel_id) : null;
             const user = await client.users.cache.get(raw.user_id);
             const member = await new client.GuildMemberParser(raw.member).toJSON();
 

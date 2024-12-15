@@ -1,5 +1,5 @@
 const constants = require("./constants");
-const { parseEvent, EventHandler } = require("./utils");
+const { parseEvent, EventHandler, checkCache } = require("./utils");
 const api = require("./api");
 const classes = require("./classes");
 const parsers = require("./parsers");
@@ -9,7 +9,7 @@ class Client {
         this._options = options;
         this.eventHandler = new EventHandler(this);
 
-        this.cache = {};
+        this._cache = {};
 
         this.api = (path, options = {}) => api(path, { token: this.token, tokenType: this.tokenType, ...options });
 
@@ -25,6 +25,8 @@ class Client {
 
         // options
         this.ffmpegPath = constants.defaultFFmpegPath;
+
+        this.checkCacheInterval = setInterval(() => checkCache(this), constants.cacheCheck);
     }
 
     login(token, tokenType) {

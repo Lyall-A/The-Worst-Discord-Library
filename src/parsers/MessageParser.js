@@ -12,12 +12,17 @@ function init(client) {
         async toJSON() {
             const raw = this.raw;
 
+            const guild = await client.guilds.cache.get(raw.guild_id);
             const channel = await client.channels.cache.get(raw.channel_id);
+            const author = await new client.UserParser(raw.author).toJSON();
+            const member = await guild.members.cache.get(author.id);
 
             const json = {
                 id: raw.id,
                 channel,
-                author: await new client.UserParser(raw.author).toJSON(),
+                guild,
+                author,
+                member,
                 content: raw.content
             };
             json.reply = (content, options = { }) => channel.send(content, { reference: { message: json }, ...(options ?? {}) });

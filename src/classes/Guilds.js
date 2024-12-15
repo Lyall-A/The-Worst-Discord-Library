@@ -1,8 +1,10 @@
+const constants = require("../constants");
+
 function init(client) {
     class Guilds {
         constructor() {
-            if (!client.cache.guilds) client.cache.guilds = [];
-            this._cache = client.cache.guilds;
+            if (!client._cache.guilds) client._cache.guilds = [];
+            this._cache = client._cache.guilds;
         }
 
         get(guildId) {
@@ -19,14 +21,25 @@ function init(client) {
 
         cache = {
             get: (guildId) => {
-                const cachedGuild = this.cache.find(guildId);
-                if (cachedGuild) return cachedGuild;
+                const cached = this.cache.find(guildId);
+                if (cached) return cached.data;
                 
                 return this.get(guildId);
             },
             add: (guild) => {
                 const index = this.cache.findIndex(i => i.id === guild.id);
-                index === null ? this._cache.push(guild) : this._cache[index] = guild;
+                const cached = {
+                    lastUpdated: Date.now(),
+                    expireDate: Date.now() + constants.cacheExpiry,
+                    _cache: guild._cache,
+                    id: guild.id,
+                    data: guild
+                }
+                if (index === null) {
+                    this._cache.push(cached);
+                } else {
+                    this._cache[index] = cached;
+                }
             },
             find: (guildId) => {
                 return this._cache.find(i => i.id === guildId) ?? null;

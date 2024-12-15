@@ -24,6 +24,7 @@ function init(client) {
         nonce = 0;
         timestamp = 0;
         sequence = 0;
+        args = [];
         nextPacketTime = null;
         silenceFrame = [248, 255, 254];
 
@@ -104,8 +105,8 @@ function init(client) {
             return this.voiceGateway.speaking({ speaking: this.speaking })
         }
 
-        setFFmpegArgs(ffmpegArgs) {
-            this.ffmpegArgs = ffmpegArgs;
+        setArgs(args) {
+            this.args = args;
         }
 
         prepare() {
@@ -122,15 +123,17 @@ function init(client) {
         }
 
         play(input) {
+            this.input = input;
             this.stopped = false;
             this.building = true;
             this.playing = true;
+            this.duration = 0;
             this.call("playing");
             this.call("building");
 
             this.setSpeaking(true);
 
-            this.opus = createOpus(input, this.ffmpegArgs);
+            this.opus = createOpus(input, this.args);
             this.opus.on("data", data => this.call("data", data));
             this.opus.on("segment", segment => {
                 if (this.stopped || this.stopping) return;
@@ -199,6 +202,7 @@ function init(client) {
                     this.nonce++;
                     this.timestamp += constants.voiceTimestampIncrement;
                     this.sequence++;
+                    this.duration += 20;
                     if (this.nonce >= constants.voiceNonceMax) this.nonce = 0;
                     if (this.timestamp >= constants.voiceTimestampMax) this.timestamp = 0;
                     if (this.sequence >= constants.voiceSequenceMax) this.sequence = 0;

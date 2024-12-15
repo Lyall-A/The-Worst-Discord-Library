@@ -13,32 +13,47 @@ for (const osuSong of osuSongs) {
     songs.push(...songFiles.filter(i => [".mp3"].includes(path.extname(i))).map(i => path.join(songPath, i)));
 }
 
-console.log(songs.length);
-
 client.on("READY", async event => {
     console.log(`Ready as ${client.user.username}`);
     const channel = await client.channels.get(process.env.CHANNEL_ID);
     const voice = new client.Voice(channel);
+    // voice.setArgs([ "-af", "bass=g=5" ]);
     await voice.prepare();
-    // voice.setFFmpegArgs([ "-af", "asetrate=44100*1.2" ]);
-    // voice.play(process.env.TRACK_INPUT);
 
-    const randomSong = songs[Math.floor(Math.random() * songs.length)];
-    voice.play(randomSong);
-    console.log(randomSong);
-
-    // voice.on("stopped", () => voice.play(songs[Math.floor(Math.random() * songs.length)]));
-
-    // console.log(piss);
-    // voice.play(process.env.TRACK_INPUT);
+    let loop = false;
+    voice.on("stopped", () => {
+        if (loop && voice.input) voice.play(voice.input);
+    });
     client.on("MESSAGE_CREATE", async msg => {
         if (msg.author.id === client.user.id) return;
-        if (msg.content === "!random osu song funny funny funny") {
+        // return console.log(msg.member)
+        const [command, ...args] = msg.content.split(" ");
+        if (command === "!play") {
+            await voice.stop();
+            voice.play(args.join(" "));
+            msg.reply(`ok ${args.join(" ")}`)
+        }
+        if (command === "!args") voice.setArgs(args);
+        if (command === "!stop") voice.stop();
+        if (command === "!replay" && voice.input) voice.play(voice.input);
+        if (command === "!update" && voice.input) {
+            const idk = voice.args.indexOf("-ss");
+            // const secs = Math.floor(voice.duration / 1000).toString();
+            const duration = args[0] ? args[0] * 1000 : voice.duration;
+            const secs = (duration / 1000).toString();
+            idk >= 0 ? voice.args[idk + 1] = secs : voice.args.push(...["-ss", secs]);
+            console.log(secs, voice.args)
+            await voice.stop();
+            voice.play(voice.input);
+            voice.duration = duration;
+        }
+        if (command === "!random") {
             await voice.stop();
             const i = songs[Math.floor(Math.random() * songs.length)];
             voice.play(i);
             msg.reply(`ok ${i}`)
         }
+        if (command === "!loop") loop = !loop;
         console.log(`[${msg.channel.name}] ${msg.content}`);
         // msg.reply(`"${msg.content}" :nerd::nerd::nerd:`);
     });

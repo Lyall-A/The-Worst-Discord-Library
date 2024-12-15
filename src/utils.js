@@ -1,4 +1,5 @@
 module.exports = {
+    checkCache: require("./utils/checkCache"),
     createOpus: require("./utils/createOpus"),
     createVoicePacket: require("./utils/createVoicePacket"),
     encryptOpus: require("./utils/encryptOpus"),

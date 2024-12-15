@@ -13,9 +13,14 @@ function init(client) {
         toJSON() {
             const raw = this.raw;
             const json = {
-                id: raw.id,
-                name: raw.name
+                _cache: { }
             };
+
+            const members = new client.GuildMembers(json);
+
+            json.id = raw.id;
+            json.name = raw.name;
+            json.members = members;
 
             return json;
         }

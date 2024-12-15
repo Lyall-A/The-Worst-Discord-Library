@@ -101,7 +101,9 @@ const constants = {
     channelVoiceTypes: [
         "GUILD_VOICE"
     ],
-    timeout: 5000
+    timeout: 5000,
+    cacheCheck: 1 * 60 * 1000,
+    cacheExpiry: 60 * 60 * 1000 // cache lasts an hour
 };
 
 module.exports = constants;

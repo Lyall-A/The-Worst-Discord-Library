@@ -12,9 +12,9 @@ function init(client) {
             const json = {
                 id: raw.id,
                 username: raw.username,
-                discriminator: raw.discriminator,
+                discriminator: raw.discriminator === "0" ? null : raw.discriminator,
                 globalName: raw.global_name,
-                bot: raw.bot
+                bot: raw.bot ?? false
             };
 
             return json;

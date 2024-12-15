@@ -1,8 +1,10 @@
+const constants = require("../constants");
+
 function init(client) {
     class Users {
         constructor() {
-            if (!client.cache.users) client.cache.users = [];
-            this._cache = client.cache.users;
+            if (!client._cache.users) client._cache.users = [];
+            this._cache = client._cache.users;
         }
 
         get(userId) {
@@ -19,14 +21,25 @@ function init(client) {
 
         cache = {
             get: (userId) => {
-                const cachedUser = this.cache.find(userId);
-                if (cachedUser) return cachedUser;
+                const cached = this.cache.find(userId);
+                if (cached) return cached.data;
                 
                 return this.get(userId);
             },
             add: (user) => {
                 const index = this.cache.findIndex(i => i.id === user.id);
-                index === null ? this._cache.push(user) : this._cache[index] = user;
+                const cached = {
+                    lastUpdated: Date.now(),
+                    expireDate: Date.now() + constants.cacheExpiry,
+                    _cache: user._cache,
+                    id: user.id,
+                    data: user
+                }
+                if (index === null) {
+                    this._cache.push(cached);
+                } else {
+                    this._cache[index] = cached;
+                }
             },
             find: (userId) => {
                 return this._cache.find(i => i.id === userId) ?? null;

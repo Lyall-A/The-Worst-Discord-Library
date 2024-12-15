@@ -12,7 +12,7 @@ function init(client) {
         /**
          * Parse into JSON used for client
          */
-        toJSON() {
+        async toJSON() {
             const raw = this.raw;
             const json = {};
 
@@ -24,7 +24,7 @@ function init(client) {
         /**
          * Parse into JSON to be sent to API
          */
-        toAPI() {
+        async toAPI() {
             const raw = this.raw;
             const json = {};
 

@@ -15,8 +15,8 @@ function init(client) {
 
             const guild = await client.guilds.cache.get(raw.guild_id);
 
-            json.id = raw.id ?? "";
-            json.type = Object.entries(constants.channelTypes).find(([key, value]) => value === raw.type)?.[0] ?? null;
+            json.id = raw.id;
+            json.type = Object.entries(constants.channelTypes).find(([key, value]) => value === raw.type)?.[0];
             json.name = raw.name;
             json.guild = guild;
             json.isVoice = constants.channelVoiceTypes.includes(json.type);
@@ -53,6 +53,7 @@ function init(client) {
                         function receivedCheck() {
                             if (!receivedVoiceStateUpdate || !receivedVoiceServerUpdate) return false;
                             stopTimeout();
+                            guild.voiceChannel = json;
                             resolve({
                                 token: receivedVoiceServerUpdate.token,
                                 endpoint: receivedVoiceServerUpdate.endpoint,
@@ -65,6 +66,26 @@ function init(client) {
 
                         client.addListener("VOICE_STATE_UPDATE", voiceStateUpdateEvent);
                         client.addListener("VOICE_SERVER_UPDATE", voiceServerUpdateEvent);
+                    });
+                }
+                json.leave = () => {
+                    return new Promise((resolve, reject) => {
+                        if (guild.voiceChannel?.id !== raw.id) return resolve();
+                        client.gateway.send("VOICE_STATE_UPDATE", new client.VoiceStateUpdateParser({
+                            guild
+                        }));
+
+                        const stopTimeout = promiseTimeout(reject, "Timed out waiting for VOICE_STATE_UPDATE event");
+
+                        function voiceStateUpdateEvent(data) {
+                            if (data.guild.id !== raw.guild_id || data.user.id !== client.user.id) return;
+                            client.removeListener("VOICE_STATE_UPDATE", voiceStateUpdateEvent);
+                            stopTimeout();
+                            guild.voiceChannel = null;
+                            resolve();
+                        }
+
+                        client.addListener("VOICE_STATE_UPDATE", voiceStateUpdateEvent);
                     });
                 }
             }

@@ -1,8 +1,10 @@
+const constants = require("../constants");
+
 function init(client) {
     class Channels {
         constructor() {
-            if (!client.cache.channels) client.cache.channels = [];
-            this._cache = client.cache.channels;
+            if (!client._cache.channels) client._cache.channels = [];
+            this._cache = client._cache.channels;
         }
 
         get(channelId) {
@@ -19,14 +21,25 @@ function init(client) {
 
         cache = {
             get: (channelId) => {
-                const cachedChannel = this.cache.find(channelId);
-                if (cachedChannel) return cachedChannel;
+                const cached = this.cache.find(channelId);
+                if (cached) return cached.data;
                 
                 return this.get(channelId);
             },
             add: (channel) => {
                 const index = this.cache.findIndex(i => i.id === channel.id);
-                index === null ? this._cache.push(channel) : this._cache[index] = channel;
+                const cached = {
+                    lastUpdated: Date.now(),
+                    expireDate: Date.now() + constants.cacheExpiry,
+                    _cache: channel._cache,
+                    id: channel.id,
+                    data: channel
+                }
+                if (index === null) {
+                    this._cache.push(cached);
+                } else {
+                    this._cache[index] = cached;
+                }
             },
             find: (channelId) => {
                 return this._cache.find(i => i.id === channelId) ?? null;

@@ -2,19 +2,22 @@ const constants = require("../constants");
 const imports = require("../imports");
 const EventHandler = require("./EventHandler");
 
-function createOpus(input = "-", extraArgs = [], ffmpegPath = constants.defaultFFmpegPath) {
+function createOpus(input = "-", extraArgs = { }, ffmpegPath = constants.defaultFFmpegPath) {
     const eventHandler = { };
     new EventHandler(eventHandler);
 
     const ffmpegProcess = imports.child_process.spawn(ffmpegPath, [
+        ...(extraArgs?.start ?? []),
         "-i", input,
         "-c:a", "libopus",
         "-f", "opus",
         "-ar", "48000",
         "-ac", "2",
-        ...(extraArgs ?? []),
+        ...(extraArgs?.end ?? []),
         "-"
     ]);
+
+    // ffmpegProcess.stderr.on("data", i => console.log(i.toString()));
 
     ffmpegProcess.stdout.on("data", data => {
         eventHandler.call("data", data);

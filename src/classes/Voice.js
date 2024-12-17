@@ -24,7 +24,7 @@ function init(client) {
         nonce = 0;
         timestamp = 0;
         sequence = 0;
-        args = [];
+        args = { };
         nextPacketTime = null;
         silenceFrame = [248, 255, 254];
 
@@ -105,8 +105,9 @@ function init(client) {
             return this.voiceGateway.speaking({ speaking: this.speaking })
         }
 
-        setArgs(args) {
-            this.args = args;
+        setArgs(start, end) {
+            if (start) this.args.start = start;
+            if (end) this.args.end = end;
         }
 
         prepare() {

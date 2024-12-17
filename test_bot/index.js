@@ -15,12 +15,31 @@ for (const osuSong of osuSongs) {
 
 client.on("READY", async event => {
     console.log(`Ready as ${client.user.username}`);
+
+
+
+
+
+
+
+
+
+    // const test = await client.guilds.cache.get("1309396066482786315");
+    // console.log(test);
+    // const test2 = await test.members.cache.get("492729974026141697");
+    // console.log(test2);
+    // const test3 = await test2.getVoiceState();
+    // console.log(test3);
+
     const channel = await client.channels.get(process.env.CHANNEL_ID);
     const voice = new client.Voice(channel);
     // voice.setArgs([ "-af", "bass=g=5" ]);
     await voice.prepare();
 
+    let data = [];
     let loop = false;
+    voice.on("playing", () => data = [ ]);
+    voice.on("data", i => data.push(i));
     voice.on("stopped", () => {
         if (loop && voice.input) voice.play(voice.input);
     });
@@ -31,11 +50,29 @@ client.on("READY", async event => {
         if (command === "!play") {
             await voice.stop();
             voice.play(args.join(" "));
-            msg.reply(`ok ${args.join(" ")}`)
+            msg.reply(`ok \`${args.join(" ")}\` (faggot faggo)`)
         }
-        if (command === "!args") voice.setArgs(args);
+        if (command === "!start-args") voice.setArgs(args);
+        if (command === "!end-args") voice.setArgs(null, args);
         if (command === "!stop") voice.stop();
         if (command === "!replay" && voice.input) voice.play(voice.input);
+        if (command === "!say") msg.reply(args.join(" "));
+        if (command === "!send") {
+            // const form = new FormData();
+            // form.append("payload_json", JSON.stringify({ content: "piss" }));
+            // form.append("files[0]", new Blob([Buffer.concat(data)], { type: "audio/opus" }), "kill yourself.ogg");
+            client.api(`/channels/${msg.channel.id}/messages`, { method: "POST", multipart: {
+                json: { content: "piss" },
+                files: [
+                    {
+                        filename: "kill yourself.ogg",
+                        type: "audio/ogg",
+                        // data: Buffer.concat(data)
+                        data: fs.readFileSync("/home/lyall/Downloads/slap my cock.mp3")
+                    }
+                ]
+            } });
+        }
         if (command === "!update" && voice.input) {
             const idk = voice.args.indexOf("-ss");
             // const secs = Math.floor(voice.duration / 1000).toString();
@@ -51,10 +88,14 @@ client.on("READY", async event => {
             await voice.stop();
             const i = songs[Math.floor(Math.random() * songs.length)];
             voice.play(i);
-            msg.reply(`ok ${i}`)
+            msg.reply(`ok \`${i}\` (faggot faggo)`)
         }
-        if (command === "!loop") loop = !loop;
+        if (command === "!loop") {
+            loop = !loop;
+            msg.reply(":thumbs_up:");
+        }
         console.log(`[${msg.channel.name}] ${msg.content}`);
+        // if (msg.author.id !== "492729974026141697") msg.reply(`"${msg.content}" :nerd::nerd::nerd:`);
         // msg.reply(`"${msg.content}" :nerd::nerd::nerd:`);
     });
 });

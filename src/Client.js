@@ -52,6 +52,10 @@ class Client {
 
                 resolve();
             });
+
+            this.on("VOICE_STATE_UPDATE", event => {
+                event.guild.voiceStates.cache.add(event);
+            });
         });
     }
 }

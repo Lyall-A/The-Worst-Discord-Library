@@ -12,17 +12,51 @@ function init(client) {
          */
         toJSON() {
             const raw = this.raw;
-            const json = {
+            const guild = {
                 _cache: { }
             };
 
-            const members = new client.GuildMembers(json);
+            class GuildMemberParser {
+                constructor(raw = {}) {
+                    this.raw = raw;
+                }
+        
+                /**
+                 * Parse into JSON used for client
+                 */
+                async toJSON() {
+                    const raw = this.raw;
+                    const member = { };
+        
+                    const user = raw.user ? await new client.UserParser(raw.user).toJSON() : null;
+                    const voiceState = new client.MemberVoiceState(member);
+                    
+                    member.nickname = raw.nick;
+                    member.user = user;
+                    member.guild = guild;
+                    member.voiceState = voiceState;
+        
+                    return member;
+                }
+        
+                /**
+                 * Parse into JSON to be sent to API
+                 */
+                toAPI() {
+        
+                }
+            }
 
-            json.id = raw.id;
-            json.name = raw.name;
-            json.members = members;
+            const voiceStates = new client.GuildVoiceStates(guild);
+            const members = new client.GuildMembers(guild);
 
-            return json;
+            guild.GuildMemberParser = GuildMemberParser;
+            guild.id = raw.id;
+            guild.name = raw.name;
+            guild.members = members;
+            guild.voiceStates = voiceStates;
+
+            return guild;
         }
 
         /**

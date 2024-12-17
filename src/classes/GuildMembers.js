@@ -13,7 +13,7 @@ function init(client) {
                 client.api(`/guilds/${this.guild.id}/members/${memberId}`).then(async res => {
                     if (res.status !== 200) return reject(res);
 
-                    const member = await new client.GuildMemberParser(res.parsed).toJSON();
+                    const member = await new this.guild.GuildMemberParser(res.parsed).toJSON();
                     this.cache.add(member);
                     resolve(member);
                 });

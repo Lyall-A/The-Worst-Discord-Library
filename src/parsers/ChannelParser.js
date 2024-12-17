@@ -13,7 +13,7 @@ function init(client) {
             const raw = this.raw;
             const json = {};
 
-            const guild = await client.guilds.cache.get(raw.guild_id);
+            const guild = await client.guilds.cache.get(raw.guild_id).catch(err => null);
 
             json.id = raw.id;
             json.type = Object.entries(constants.channelTypes).find(([key, value]) => value === raw.type)?.[0];
@@ -53,7 +53,7 @@ function init(client) {
                         function receivedCheck() {
                             if (!receivedVoiceStateUpdate || !receivedVoiceServerUpdate) return false;
                             stopTimeout();
-                            guild.voiceChannel = json;
+                            // guild.voiceChannel = json;
                             resolve({
                                 token: receivedVoiceServerUpdate.token,
                                 endpoint: receivedVoiceServerUpdate.endpoint,
@@ -70,7 +70,7 @@ function init(client) {
                 }
                 json.leave = () => {
                     return new Promise((resolve, reject) => {
-                        if (guild.voiceChannel?.id !== raw.id) return resolve();
+                        if (guild.voice?.id !== raw.id) return resolve();
                         client.gateway.send("VOICE_STATE_UPDATE", new client.VoiceStateUpdateParser({
                             guild
                         }));
@@ -81,7 +81,7 @@ function init(client) {
                             if (data.guild.id !== raw.guild_id || data.user.id !== client.user.id) return;
                             client.removeListener("VOICE_STATE_UPDATE", voiceStateUpdateEvent);
                             stopTimeout();
-                            guild.voiceChannel = null;
+                            // guild.voiceChannel = null;
                             resolve();
                         }
 
